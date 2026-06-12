@@ -12,7 +12,7 @@ COPY . .
 # Create data + art directories
 RUN mkdir -p data trees static/art
 
-EXPOSE 5000
+EXPOSE 6969
 
 # Use wsgi.py so init_db() fires on startup
-CMD ["gunicorn", "--bind", "0.0.0.0:5000", "--workers", "2", "--threads", "2", "--timeout", "60", "wsgi:app"]
+CMD ["gunicorn", "--bind", "0.0.0.0:6969", "--workers", "2", "--threads", "2", "--timeout", "60", "wsgi:app"]

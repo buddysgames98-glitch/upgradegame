@@ -3,7 +3,7 @@ services:
     build: .
     container_name: ascension_game
     ports:
-      - "5000:5000"
+      - "6969:6969"
     restart: unless-stopped
     environment:
       - FLASK_ENV=production
@@ -16,7 +16,7 @@ services:
       # Custom art: drop PNGs/SVGs here and they appear in-game
       - ./static/art:/app/static/art
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:5000/"]
+      test: ["CMD", "curl", "-f", "http://localhost:6969/"]
       interval: 30s
       timeout: 10s
       retries: 3
