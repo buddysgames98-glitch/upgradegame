@@ -19,13 +19,187 @@
   </div>
 </div>
 
-<!-- ── Main Layout ────────────────────────────────────────────────────── -->
+<!-- ── Main Menu ───────────────────────────────────────────────────────── -->
+<div id="main-menu" class="screen hidden">
+  <div class="menu-inner">
+    <div class="menu-logo">◈</div>
+    <div class="menu-title">UPGRADE TREE MAKER</div>
+    <div class="menu-tagline">build · play · share</div>
+    <div class="menu-btns">
+      <button id="btn-continue" class="menu-btn primary hidden" onclick="Menu.continueGame()">
+        ▶ Continue
+        <span class="menu-btn-sub" id="continue-sub"></span>
+      </button>
+      <button class="menu-btn" onclick="Menu.showNewGame()">
+        ✦ New Game
+        <span class="menu-btn-sub">Start fresh with a new tree</span>
+      </button>
+      <button class="menu-btn" onclick="Menu.loadSave()">
+        📂 Load Save
+        <span class="menu-btn-sub">Restore from a save file</span>
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ── New Game Sub-Menu ───────────────────────────────────────────────── -->
+<div id="newgame-menu" class="screen hidden">
+  <div class="menu-inner">
+    <div class="menu-logo">✦</div>
+    <div class="menu-title">NEW GAME</div>
+    <div class="menu-tagline">how do you want to start?</div>
+    <div class="menu-btns">
+      <button class="menu-btn primary" onclick="Menu.showBuilder()">
+        🔧 Create Tree
+        <span class="menu-btn-sub">Design your own upgrade tree from scratch</span>
+      </button>
+      <button class="menu-btn" onclick="Menu.showGenerator()">
+        ⚡ Generate Tree
+        <span class="menu-btn-sub">Auto-generate a random tree and play</span>
+      </button>
+      <button class="menu-btn secondary" onclick="Menu.showMain()">← Back</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── Tree Generator Screen ──────────────────────────────────────────── -->
+<div id="generator-screen" class="screen hidden">
+  <div class="builder-layout">
+    <div class="builder-sidebar">
+      <div class="builder-header">
+        <button class="back-btn" onclick="Menu.showNewGame()">← Back</button>
+        <h2>⚡ Generate Tree</h2>
+      </div>
+      <div class="builder-form">
+        <div class="form-group">
+          <label>Theme</label>
+          <select id="gen-theme" class="form-input">
+            <option value="fantasy">Fantasy</option>
+            <option value="scifi">Sci-Fi</option>
+            <option value="nature">Nature</option>
+            <option value="tech">Tech</option>
+            <option value="cosmic">Cosmic</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Size</label>
+          <div class="radio-group">
+            <label class="radio-opt"><input type="radio" name="gen-size" value="small"> Small <span class="radio-sub">~8 nodes</span></label>
+            <label class="radio-opt"><input type="radio" name="gen-size" value="medium" checked> Medium <span class="radio-sub">~15 nodes</span></label>
+            <label class="radio-opt"><input type="radio" name="gen-size" value="large"> Large <span class="radio-sub">~25 nodes</span></label>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Prestige Tree</label>
+          <div class="radio-group">
+            <label class="radio-opt"><input type="radio" name="gen-prestige" value="yes" checked> Include prestige upgrades</label>
+            <label class="radio-opt"><input type="radio" name="gen-prestige" value="no"> Skip prestige</label>
+          </div>
+        </div>
+        <button class="action-btn" onclick="Menu.generatePreview()">⚡ Generate</button>
+        <button id="btn-play-generated" class="action-btn primary hidden" onclick="Menu.playGenerated()">▶ Play This Tree</button>
+      </div>
+    </div>
+    <div class="builder-preview">
+      <div class="preview-label">Preview</div>
+      <canvas id="gen-canvas"></canvas>
+    </div>
+  </div>
+</div>
+
+<!-- ── Tree Builder Screen ────────────────────────────────────────────── -->
+<div id="builder-screen" class="screen hidden">
+  <div class="builder-layout">
+    <div class="builder-sidebar">
+      <div class="builder-header">
+        <button class="back-btn" onclick="Menu.showNewGame()">← Back</button>
+        <h2>🔧 Create Tree</h2>
+      </div>
+      <div class="builder-form">
+
+        <div class="form-section">
+          <div class="form-section-title">Tree Settings</div>
+          <div class="form-group">
+            <label>Tree Name</label>
+            <input id="tree-name" class="form-input" type="text" placeholder="My Awesome Tree" maxlength="40">
+          </div>
+          <div class="form-group">
+            <label>Resource Name</label>
+            <input id="tree-resource-name" class="form-input" type="text" placeholder="Energy" maxlength="20">
+          </div>
+          <div class="form-group">
+            <label>Resource Icon</label>
+            <input id="tree-resource-icon" class="form-input" type="text" placeholder="⚡" maxlength="4">
+          </div>
+          <div class="form-group">
+            <label>Base Rate <span class="label-hint">(per sec)</span></label>
+            <input id="tree-base-rate" class="form-input" type="number" value="0.5" min="0.01" step="0.1">
+          </div>
+        </div>
+
+        <div class="form-section">
+          <div class="form-section-title">Add Node</div>
+          <div class="form-group">
+            <label>Name</label>
+            <input id="node-name" class="form-input" type="text" placeholder="Spark" maxlength="30">
+          </div>
+          <div class="form-group">
+            <label>Description</label>
+            <input id="node-desc" class="form-input" type="text" placeholder="The first flicker…" maxlength="80">
+          </div>
+          <div class="form-group">
+            <label>Cost</label>
+            <input id="node-cost" class="form-input" type="number" value="10" min="1">
+          </div>
+          <div class="form-group">
+            <label>Effect</label>
+            <div class="input-row">
+              <select id="node-effect-type" class="form-input" onchange="Builder.onEffectTypeChange()">
+                <option value="rate_add">+ Rate (additive)</option>
+                <option value="rate_mult">× Rate (multiplier)</option>
+              </select>
+              <input id="node-effect-value" class="form-input" type="number" value="1" step="0.1" style="width:80px">
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Tier</label>
+            <input id="node-tier" class="form-input" type="number" value="0" min="0" max="10">
+          </div>
+          <div class="form-group">
+            <label>Requires <span class="label-hint">(select prerequisites)</span></label>
+            <div id="node-requires-list" class="requires-list">
+              <span class="requires-empty">No nodes yet</span>
+            </div>
+          </div>
+          <button class="action-btn" onclick="Builder.addNode()">+ Add Node</button>
+        </div>
+
+        <div class="form-section" id="nodes-section">
+          <div class="form-section-title">Nodes <span id="node-count-label">(0)</span></div>
+          <div id="builder-node-list" class="builder-node-list"></div>
+        </div>
+
+        <div class="form-section">
+          <button id="btn-play-built" class="action-btn primary" onclick="Builder.playTree()" disabled>▶ Play This Tree</button>
+          <p class="builder-hint">Need at least 1 node to play.</p>
+        </div>
+      </div>
+    </div>
+    <div class="builder-preview">
+      <div class="preview-label">Live Preview</div>
+      <canvas id="builder-canvas"></canvas>
+    </div>
+  </div>
+</div>
+
+<!-- ── Main App (Game) ─────────────────────────────────────────────────── -->
 <div id="app" class="hidden">
 
   <!-- TOP HUD -->
   <div id="hud">
     <div id="hud-left">
-      <span id="game-title">◈ UPGRADE TREE MAKER</span>
+      <button class="hud-menu-btn" onclick="Menu.showMain()" title="Main Menu">◈</button>
+      <span id="game-title">UPGRADE TREE MAKER</span>
     </div>
     <div id="hud-center">
       <div id="resource-display">
@@ -55,8 +229,8 @@
     <button class="tool-btn" id="tab-prestige" onclick="Game.switchTab('prestige')">✨ Prestige</button>
     <button class="tool-btn" id="tab-settings" onclick="Game.switchTab('settings')">⚙ Settings</button>
     <div style="flex:1"></div>
-    <button class="tool-btn small" onclick="Game.exportSave()">💾 Export Save</button>
-    <button class="tool-btn small" onclick="Game.importSave()">📂 Import Save</button>
+    <button class="tool-btn small" onclick="Game.saveGame(); Game.toast('Saved!')">💾 Save</button>
+    <button class="tool-btn small" onclick="Game.exportSave()">📤 Export</button>
   </div>
 
   <!-- PANELS -->
@@ -80,8 +254,7 @@
     <div id="panel-prestige" class="panel hidden">
       <div class="panel-header-text">
         <h2>✨ Prestige Tree</h2>
-        <p>Spend <strong>Essence</strong> earned from prestiging on permanent upgrades.<br>
-           These persist through every reset.</p>
+        <p>Spend <strong>Essence</strong> earned from prestiging on permanent upgrades. These persist through every reset.</p>
       </div>
       <div id="prestige-viewport-wrap">
         <canvas id="prestige-canvas"></canvas>
@@ -98,36 +271,28 @@
           <h3>Tree Management</h3>
           <button class="settings-btn" onclick="Game.exportTree()">📤 Export Tree JSON</button>
           <button class="settings-btn" onclick="Game.importTree()">📥 Import Tree JSON</button>
-          <p class="settings-hint">Share your custom upgrade trees with friends as JSON files.</p>
+          <p class="settings-hint">Share your custom upgrade trees as JSON files.</p>
         </section>
 
         <section class="settings-section">
           <h3>Custom Art</h3>
           <p class="settings-hint">
-            Place image files in the <code>static/art/</code> folder named after a node ID
-            (e.g. <code>spark.png</code>). Supported: PNG, JPG, GIF, WebP, SVG.<br>
-            If no custom art is found, geometric art is auto-generated.
+            Place image files in <code>static/art/</code> named after a node ID (e.g. <code>spark.png</code>).
+            Supported: PNG, JPG, GIF, WebP, SVG. Geometric art is auto-generated as a fallback.
           </p>
         </section>
 
         <section class="settings-section">
           <h3>Save Data</h3>
           <p class="settings-hint">Session ID: <code id="session-id-display">—</code></p>
-          <button class="settings-btn danger" onclick="Game.hardReset()">🗑 Hard Reset (delete all data)</button>
-        </section>
-
-        <section class="settings-section">
-          <h3>About</h3>
-          <p class="settings-hint">
-            An infinite idle upgrade game with shareable tree definitions.<br>
-            Built with Flask + Python, runs in Docker.
-          </p>
+          <button class="settings-btn" onclick="Game.exportSave()">📂 Export Save File</button>
+          <button class="settings-btn danger" onclick="Game.hardReset()">🗑 Hard Reset</button>
         </section>
       </div>
     </div>
 
-  </div><!-- /panels -->
-</div><!-- /app -->
+  </div>
+</div>
 
 <!-- ── Node Detail Modal ───────────────────────────────────────────────── -->
 <div id="modal-overlay" class="hidden" onclick="Game.closeModal()"></div>
@@ -161,12 +326,12 @@
   </div>
 </div>
 
-<!-- ── Toast Notification ─────────────────────────────────────────────── -->
+<!-- ── Toast ──────────────────────────────────────────────────────────── -->
 <div id="toast"></div>
 
 <!-- Hidden file inputs -->
-<input type="file" id="import-save-input" accept=".json" style="display:none" onchange="Game.handleImportSave(event)">
-<input type="file" id="import-tree-input" accept=".json" style="display:none" onchange="Game.handleImportTree(event)">
+<input type="file" id="import-save-input"  accept=".json" style="display:none" onchange="Menu.handleLoadSave(event)">
+<input type="file" id="import-tree-input"  accept=".json" style="display:none" onchange="Game.handleImportTree(event)">
 
 <script src="/static/js/svg_art.js"></script>
 <script src="/static/js/game.js"></script>
