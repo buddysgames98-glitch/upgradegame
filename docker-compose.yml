@@ -1,0 +1,22 @@
+services:
+  upgradegame:
+    build: .
+    container_name: ascension_game
+    ports:
+      - "5000:5000"
+    restart: unless-stopped
+    environment:
+      - FLASK_ENV=production
+      - DB_PATH=/data/game.db
+      - TREES_DIR=/data/trees
+      - ART_DIR=/app/static/art
+    volumes:
+      # Persistent DB + tree files survive container rebuilds
+      - ./data:/data
+      # Custom art: drop PNGs/SVGs here and they appear in-game
+      - ./static/art:/app/static/art
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5000/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3

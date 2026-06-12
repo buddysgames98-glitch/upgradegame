@@ -1,0 +1,17 @@
+[Unit]
+Description=Upgradegame auto-deploy watcher
+After=network-online.target docker.service
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=YOUR_USERNAME
+WorkingDirectory=/path/to/upgradegame
+ExecStart=/path/to/upgradegame/watch_and_deploy.sh
+Restart=always
+RestartSec=10
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target

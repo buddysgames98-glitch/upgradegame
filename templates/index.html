@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ascension — Upgrade Tree</title>
+<link rel="stylesheet" href="/static/css/game.css">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<!-- ── Loading Screen ──────────────────────────────────────────────────── -->
+<div id="loading-screen">
+  <div id="loading-inner">
+    <div id="loading-logo">◈</div>
+    <div id="loading-title">ASCENSION</div>
+    <div id="loading-bar-wrap"><div id="loading-bar"></div></div>
+    <div id="loading-msg">Initializing…</div>
+  </div>
+</div>
+
+<!-- ── Main Layout ────────────────────────────────────────────────────── -->
+<div id="app" class="hidden">
+
+  <!-- TOP HUD -->
+  <div id="hud">
+    <div id="hud-left">
+      <span id="game-title">◈ ASCENSION</span>
+    </div>
+    <div id="hud-center">
+      <div id="resource-display">
+        <span id="resource-icon">⚡</span>
+        <span id="resource-amount">0</span>
+        <span id="resource-name">Energy</span>
+      </div>
+      <div id="rate-display">
+        <span id="rate-value">+0.00</span>
+        <span id="rate-label">/sec</span>
+      </div>
+    </div>
+    <div id="hud-right">
+      <div id="prestige-display">
+        <span id="prestige-icon">✨</span>
+        <span id="prestige-amount">0</span>
+        <span id="prestige-label">Essence</span>
+        <span id="prestige-count-badge" class="hidden"></span>
+      </div>
+      <button id="btn-prestige" class="hud-btn prestige-btn hidden" onclick="Game.showPrestigeModal()">⟳ PRESTIGE</button>
+    </div>
+  </div>
+
+  <!-- SECONDARY TOOLBAR -->
+  <div id="toolbar">
+    <button class="tool-btn active" id="tab-tree" onclick="Game.switchTab('tree')">🌿 Tree</button>
+    <button class="tool-btn" id="tab-prestige" onclick="Game.switchTab('prestige')">✨ Prestige</button>
+    <button class="tool-btn" id="tab-settings" onclick="Game.switchTab('settings')">⚙ Settings</button>
+    <div style="flex:1"></div>
+    <button class="tool-btn small" onclick="Game.exportSave()">💾 Export Save</button>
+    <button class="tool-btn small" onclick="Game.importSave()">📂 Import Save</button>
+  </div>
+
+  <!-- PANELS -->
+  <div id="panels">
+
+    <!-- UPGRADE TREE PANEL -->
+    <div id="panel-tree" class="panel active">
+      <div id="tree-viewport-wrap">
+        <canvas id="tree-canvas"></canvas>
+        <div id="tree-overlay"></div>
+      </div>
+      <div id="tree-controls">
+        <button class="ctrl-btn" onclick="Game.treeZoom(1.2)">＋</button>
+        <button class="ctrl-btn" onclick="Game.treeZoom(0.8)">－</button>
+        <button class="ctrl-btn" onclick="Game.treeReset()">⌂</button>
+        <span id="zoom-label">100%</span>
+      </div>
+    </div>
+
+    <!-- PRESTIGE TREE PANEL -->
+    <div id="panel-prestige" class="panel hidden">
+      <div class="panel-header-text">
+        <h2>✨ Prestige Tree</h2>
+        <p>Spend <strong>Essence</strong> earned from prestiging on permanent upgrades.<br>
+           These persist through every reset.</p>
+      </div>
+      <div id="prestige-viewport-wrap">
+        <canvas id="prestige-canvas"></canvas>
+        <div id="prestige-overlay"></div>
+      </div>
+    </div>
+
+    <!-- SETTINGS PANEL -->
+    <div id="panel-settings" class="panel hidden">
+      <div class="settings-inner">
+        <h2>⚙ Settings</h2>
+
+        <section class="settings-section">
+          <h3>Tree Management</h3>
+          <button class="settings-btn" onclick="Game.exportTree()">📤 Export Tree JSON</button>
+          <button class="settings-btn" onclick="Game.importTree()">📥 Import Tree JSON</button>
+          <p class="settings-hint">Share your custom upgrade trees with friends as JSON files.</p>
+        </section>
+
+        <section class="settings-section">
+          <h3>Custom Art</h3>
+          <p class="settings-hint">
+            Place image files in the <code>static/art/</code> folder named after a node ID
+            (e.g. <code>spark.png</code>). Supported: PNG, JPG, GIF, WebP, SVG.<br>
+            If no custom art is found, geometric art is auto-generated.
+          </p>
+        </section>
+
+        <section class="settings-section">
+          <h3>Save Data</h3>
+          <p class="settings-hint">Session ID: <code id="session-id-display">—</code></p>
+          <button class="settings-btn danger" onclick="Game.hardReset()">🗑 Hard Reset (delete all data)</button>
+        </section>
+
+        <section class="settings-section">
+          <h3>About</h3>
+          <p class="settings-hint">
+            An infinite idle upgrade game with shareable tree definitions.<br>
+            Built with Flask + Python, runs in Docker.
+          </p>
+        </section>
+      </div>
+    </div>
+
+  </div><!-- /panels -->
+</div><!-- /app -->
+
+<!-- ── Node Detail Modal ───────────────────────────────────────────────── -->
+<div id="modal-overlay" class="hidden" onclick="Game.closeModal()"></div>
+<div id="node-modal" class="hidden">
+  <div id="node-modal-art"></div>
+  <div id="node-modal-info">
+    <div id="node-modal-name"></div>
+    <div id="node-modal-tier"></div>
+    <div id="node-modal-desc"></div>
+    <div id="node-modal-effect"></div>
+    <div id="node-modal-cost"></div>
+    <div id="node-modal-requires"></div>
+  </div>
+  <div id="node-modal-actions">
+    <button id="node-modal-btn" onclick="Game.purchaseFromModal()"></button>
+    <button class="cancel-btn" onclick="Game.closeModal()">✕ Close</button>
+  </div>
+</div>
+
+<!-- ── Prestige Confirm Modal ─────────────────────────────────────────── -->
+<div id="prestige-modal" class="hidden">
+  <div id="prestige-modal-inner">
+    <div id="prestige-modal-icon">⟳</div>
+    <h2>Prestige Reset</h2>
+    <p id="prestige-modal-desc"></p>
+    <div id="prestige-modal-earnings"></div>
+    <div class="modal-actions">
+      <button id="prestige-confirm-btn" onclick="Game.confirmPrestige()">⟳ Prestige Now</button>
+      <button class="cancel-btn" onclick="Game.closePrestigeModal()">✕ Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── Toast Notification ─────────────────────────────────────────────── -->
+<div id="toast"></div>
+
+<!-- Hidden file inputs -->
+<input type="file" id="import-save-input" accept=".json" style="display:none" onchange="Game.handleImportSave(event)">
+<input type="file" id="import-tree-input" accept=".json" style="display:none" onchange="Game.handleImportTree(event)">
+
+<script src="/static/js/svg_art.js"></script>
+<script src="/static/js/game.js"></script>
+</body>
+</html>

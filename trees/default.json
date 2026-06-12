@@ -1,0 +1,371 @@
+{
+  "name": "Ascension",
+  "description": "From dust to divinity \u2014 the default upgrade tree.",
+  "version": "1.0",
+  "resource": {
+    "name": "Energy",
+    "icon": "\u26a1",
+    "color": "#f0c040"
+  },
+  "base_rate": 0.5,
+  "prestige_resource": {
+    "name": "Essence",
+    "icon": "\u2728",
+    "color": "#c080ff"
+  },
+  "nodes": [
+    {
+      "id": "spark",
+      "name": "Spark",
+      "tier": 0,
+      "x": 0,
+      "y": 0,
+      "description": "The first flicker of potential.",
+      "cost": 10,
+      "effect": {
+        "type": "rate_add",
+        "value": 0.5
+      },
+      "requires": [],
+      "shape": "diamond",
+      "color": "#f0c040",
+      "accent": "#fff8d0"
+    },
+    {
+      "id": "kindle",
+      "name": "Kindle",
+      "tier": 1,
+      "x": -2,
+      "y": 1,
+      "description": "Fan the spark into a steady flame.",
+      "cost": 50,
+      "effect": {
+        "type": "rate_add",
+        "value": 2
+      },
+      "requires": [
+        "spark"
+      ],
+      "shape": "circle",
+      "color": "#e07830",
+      "accent": "#ffd090"
+    },
+    {
+      "id": "focus",
+      "name": "Focus",
+      "tier": 1,
+      "x": 2,
+      "y": 1,
+      "description": "Direct your energy with precision.",
+      "cost": 60,
+      "effect": {
+        "type": "rate_mult",
+        "value": 1.5
+      },
+      "requires": [
+        "spark"
+      ],
+      "shape": "hexagon",
+      "color": "#3090e0",
+      "accent": "#90d0ff"
+    },
+    {
+      "id": "furnace",
+      "name": "Furnace",
+      "tier": 2,
+      "x": -3,
+      "y": 2,
+      "description": "A roaring engine of production.",
+      "cost": 300,
+      "effect": {
+        "type": "rate_add",
+        "value": 10
+      },
+      "requires": [
+        "kindle"
+      ],
+      "shape": "square",
+      "color": "#c04020",
+      "accent": "#ff9060"
+    },
+    {
+      "id": "lens",
+      "name": "Lens",
+      "tier": 2,
+      "x": 0,
+      "y": 2,
+      "description": "Concentrate all sources to a point.",
+      "cost": 350,
+      "effect": {
+        "type": "rate_mult",
+        "value": 2.0
+      },
+      "requires": [
+        "kindle",
+        "focus"
+      ],
+      "shape": "triangle",
+      "color": "#20a0c0",
+      "accent": "#80e8ff"
+    },
+    {
+      "id": "resonance",
+      "name": "Resonance",
+      "tier": 2,
+      "x": 3,
+      "y": 2,
+      "description": "Your energy hums in harmony.",
+      "cost": 400,
+      "effect": {
+        "type": "rate_mult",
+        "value": 1.8
+      },
+      "requires": [
+        "focus"
+      ],
+      "shape": "star",
+      "color": "#8030d0",
+      "accent": "#d090ff"
+    },
+    {
+      "id": "forge",
+      "name": "Forge",
+      "tier": 3,
+      "x": -4,
+      "y": 3,
+      "description": "Smelt raw potential into pure power.",
+      "cost": 2000,
+      "effect": {
+        "type": "rate_add",
+        "value": 50
+      },
+      "requires": [
+        "furnace"
+      ],
+      "shape": "square",
+      "color": "#901010",
+      "accent": "#ff6030"
+    },
+    {
+      "id": "prism",
+      "name": "Prism",
+      "tier": 3,
+      "x": -1,
+      "y": 3,
+      "description": "Split your output into spectrum paths.",
+      "cost": 2500,
+      "effect": {
+        "type": "rate_mult",
+        "value": 2.5
+      },
+      "requires": [
+        "furnace",
+        "lens"
+      ],
+      "shape": "triangle",
+      "color": "#10a060",
+      "accent": "#60ffb0"
+    },
+    {
+      "id": "amplifier",
+      "name": "Amplifier",
+      "tier": 3,
+      "x": 2,
+      "y": 3,
+      "description": "Boost all multipliers by resonating.",
+      "cost": 3000,
+      "effect": {
+        "type": "rate_mult",
+        "value": 3.0
+      },
+      "requires": [
+        "lens",
+        "resonance"
+      ],
+      "shape": "hexagon",
+      "color": "#6020b0",
+      "accent": "#c080ff"
+    },
+    {
+      "id": "beacon",
+      "name": "Beacon",
+      "tier": 3,
+      "x": 4,
+      "y": 3,
+      "description": "Broadcast your power outward.",
+      "cost": 3500,
+      "effect": {
+        "type": "rate_add",
+        "value": 80
+      },
+      "requires": [
+        "resonance"
+      ],
+      "shape": "star",
+      "color": "#b08000",
+      "accent": "#ffe060"
+    },
+    {
+      "id": "reactor",
+      "name": "Reactor",
+      "tier": 4,
+      "x": -3,
+      "y": 4,
+      "description": "Sustained chain reaction \u2014 perpetual output.",
+      "cost": 20000,
+      "effect": {
+        "type": "rate_mult",
+        "value": 4.0
+      },
+      "requires": [
+        "forge",
+        "prism"
+      ],
+      "shape": "circle",
+      "color": "#c00040",
+      "accent": "#ff60a0"
+    },
+    {
+      "id": "nexus",
+      "name": "Nexus",
+      "tier": 4,
+      "x": 0,
+      "y": 4,
+      "description": "All paths converge here.",
+      "cost": 25000,
+      "effect": {
+        "type": "rate_mult",
+        "value": 5.0
+      },
+      "requires": [
+        "prism",
+        "amplifier"
+      ],
+      "shape": "diamond",
+      "color": "#0060c0",
+      "accent": "#60c0ff"
+    },
+    {
+      "id": "pylon",
+      "name": "Pylon",
+      "tier": 4,
+      "x": 3,
+      "y": 4,
+      "description": "A towering monument to progress.",
+      "cost": 30000,
+      "effect": {
+        "type": "rate_add",
+        "value": 500
+      },
+      "requires": [
+        "amplifier",
+        "beacon"
+      ],
+      "shape": "triangle",
+      "color": "#404000",
+      "accent": "#c0c000"
+    },
+    {
+      "id": "singularity",
+      "name": "Singularity",
+      "tier": 5,
+      "x": 0,
+      "y": 5,
+      "description": "Energy beyond comprehension. The threshold.",
+      "cost": 500000,
+      "effect": {
+        "type": "rate_mult",
+        "value": 10.0
+      },
+      "requires": [
+        "reactor",
+        "nexus",
+        "pylon"
+      ],
+      "shape": "star",
+      "color": "#8000ff",
+      "accent": "#ffffff"
+    }
+  ],
+  "prestige_nodes": [
+    {
+      "id": "p_momentum",
+      "name": "Momentum",
+      "description": "Each prestige adds +10% global multiplier.",
+      "cost": 1,
+      "effect": {
+        "type": "prestige_mult_per_prestige",
+        "value": 0.1
+      },
+      "requires": [],
+      "shape": "circle",
+      "color": "#c080ff",
+      "accent": "#ffffff"
+    },
+    {
+      "id": "p_headstart",
+      "name": "Head Start",
+      "description": "Begin each run with 100 free Energy.",
+      "cost": 2,
+      "effect": {
+        "type": "start_bonus",
+        "value": 100
+      },
+      "requires": [
+        "p_momentum"
+      ],
+      "shape": "diamond",
+      "color": "#ff80c0",
+      "accent": "#ffffff"
+    },
+    {
+      "id": "p_recall",
+      "name": "Recall",
+      "description": "Unlock your first tier-1 upgrades for free at run start.",
+      "cost": 3,
+      "effect": {
+        "type": "auto_unlock_tier",
+        "value": 1
+      },
+      "requires": [
+        "p_momentum"
+      ],
+      "shape": "hexagon",
+      "color": "#80c0ff",
+      "accent": "#ffffff"
+    },
+    {
+      "id": "p_echo",
+      "name": "Echo",
+      "description": "Idle production is 2\u00d7 faster while the tab is closed.",
+      "cost": 5,
+      "effect": {
+        "type": "offline_mult",
+        "value": 2.0
+      },
+      "requires": [
+        "p_headstart",
+        "p_recall"
+      ],
+      "shape": "square",
+      "color": "#c0ff80",
+      "accent": "#ffffff"
+    },
+    {
+      "id": "p_transcendence",
+      "name": "Transcendence",
+      "description": "Global \u00d75 \u2014 the universe bends to your will.",
+      "cost": 15,
+      "effect": {
+        "type": "global_mult",
+        "value": 5.0
+      },
+      "requires": [
+        "p_echo"
+      ],
+      "shape": "star",
+      "color": "#ffffff",
+      "accent": "#8000ff"
+    }
+  ]
+}

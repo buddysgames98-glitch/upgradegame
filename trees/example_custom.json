@@ -1,0 +1,129 @@
+{
+  "id": "example_custom",
+  "name": "Deep Ocean",
+  "description": "Dive from the tide pools to the crushing abyss.",
+  "version": "1.0",
+
+  "resource": {
+    "name": "Bioluminescence",
+    "icon": "🫧",
+    "color": "#40c0ff"
+  },
+  "base_rate": 0.3,
+
+  "prestige_resource": {
+    "name": "Abyssal Essence",
+    "icon": "🌊",
+    "color": "#0040a0"
+  },
+
+  "nodes": [
+    {
+      "id": "tide_pool",
+      "name": "Tide Pool",
+      "tier": 0,
+      "x": 0, "y": 0,
+      "description": "A shallow pool teeming with tiny life.",
+      "cost": 5,
+      "effect": { "type": "rate_add", "value": 0.3 },
+      "requires": [],
+      "shape": "circle", "color": "#40b0e0", "accent": "#a0e0ff"
+    },
+    {
+      "id": "kelp_forest",
+      "name": "Kelp Forest",
+      "tier": 1,
+      "x": -2, "y": 1,
+      "description": "Swaying towers of kelp shelter countless creatures.",
+      "cost": 40,
+      "effect": { "type": "rate_add", "value": 2 },
+      "requires": ["tide_pool"],
+      "shape": "triangle", "color": "#20a040", "accent": "#80ff80"
+    },
+    {
+      "id": "coral_reef",
+      "name": "Coral Reef",
+      "tier": 1,
+      "x": 2, "y": 1,
+      "description": "A riot of color and biodiversity.",
+      "cost": 60,
+      "effect": { "type": "rate_mult", "value": 1.6 },
+      "requires": ["tide_pool"],
+      "shape": "hexagon", "color": "#e05030", "accent": "#ffa080"
+    },
+    {
+      "id": "open_ocean",
+      "name": "Open Ocean",
+      "tier": 2,
+      "x": 0, "y": 2,
+      "description": "Vast, blue, and full of mystery.",
+      "cost": 400,
+      "effect": { "type": "rate_mult", "value": 2.5 },
+      "requires": ["kelp_forest", "coral_reef"],
+      "shape": "diamond", "color": "#2060c0", "accent": "#80b0ff"
+    },
+    {
+      "id": "midnight_zone",
+      "name": "Midnight Zone",
+      "tier": 3,
+      "x": -2, "y": 3,
+      "description": "No sunlight reaches here. Only pressure and darkness.",
+      "cost": 3000,
+      "effect": { "type": "rate_add", "value": 60 },
+      "requires": ["open_ocean"],
+      "shape": "square", "color": "#102040", "accent": "#4080c0"
+    },
+    {
+      "id": "hydrothermal_vent",
+      "name": "Hydrothermal Vent",
+      "tier": 3,
+      "x": 2, "y": 3,
+      "description": "Superheated water nurtures extremophile colonies.",
+      "cost": 4000,
+      "effect": { "type": "rate_mult", "value": 3.5 },
+      "requires": ["open_ocean"],
+      "shape": "star", "color": "#c04000", "accent": "#ff8040"
+    },
+    {
+      "id": "hadal_zone",
+      "name": "Hadal Zone",
+      "tier": 4,
+      "x": 0, "y": 4,
+      "description": "The deepest trenches. Life persists impossibly.",
+      "cost": 30000,
+      "effect": { "type": "rate_mult", "value": 8.0 },
+      "requires": ["midnight_zone", "hydrothermal_vent"],
+      "shape": "circle", "color": "#000830", "accent": "#2040a0"
+    }
+  ],
+
+  "prestige_nodes": [
+    {
+      "id": "p_tidal_memory",
+      "name": "Tidal Memory",
+      "description": "+15% production per prestige.",
+      "cost": 1,
+      "effect": { "type": "prestige_mult_per_prestige", "value": 0.15 },
+      "requires": [],
+      "shape": "circle", "color": "#4080c0", "accent": "#ffffff"
+    },
+    {
+      "id": "p_current",
+      "name": "Rip Current",
+      "description": "Start each run with a strong current bonus (+200 Bioluminescence).",
+      "cost": 2,
+      "effect": { "type": "start_bonus", "value": 200 },
+      "requires": ["p_tidal_memory"],
+      "shape": "diamond", "color": "#2060a0", "accent": "#ffffff"
+    },
+    {
+      "id": "p_abyss",
+      "name": "Abyssal Echo",
+      "description": "×8 global multiplier — the deep gives back.",
+      "cost": 20,
+      "effect": { "type": "global_mult", "value": 8.0 },
+      "requires": ["p_current"],
+      "shape": "star", "color": "#001030", "accent": "#4080ff"
+    }
+  ]
+}
