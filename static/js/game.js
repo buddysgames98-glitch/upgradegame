@@ -628,7 +628,7 @@ const Game = (() => {
 
   // ── Start game from a tree definition ───────────────────────────
   async function startNewGame(treeDef) {
-    S.treeDef          = treeDef;
+    S.treeDef          = JSON.parse(JSON.stringify(treeDef)); // deep copy — sever any shared references
     S.treeId           = 'custom';
     S.resources        = 0;
     S.totalEarned      = 0;
@@ -757,6 +757,11 @@ const Game = (() => {
         S.totalEarned += S.rate * dt;
         tickInProgress();
         updateHUD();
+        // always re-render tree so progress arcs animate and canvas stays valid
+        if (S.treeDef) {
+          renderTree(TV, S.treeDef.nodes || [], false);
+          if (activeTab === 'prestige') renderTree(PV, S.treeDef.prestige_nodes || [], true);
+        }
         saveTimer += dt;
         if (saveTimer > 15) { saveTimer = 0; saveGame(); }
       }
@@ -778,7 +783,6 @@ const Game = (() => {
         showToast(`✓ ${getNode(nid)?.name || nid} unlocked!`);
       }
     }
-    if (changed) renderTree(TV, S.treeDef?.nodes || [], false);
   }
 
   // ── HUD ─────────────────────────────────────────────────────────
