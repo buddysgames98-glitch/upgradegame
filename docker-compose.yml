@@ -1,7 +1,7 @@
 services:
   upgradegame:
     build: .
-    container_name: ascension_game
+    container_name: upgrade_tree_maker
     ports:
       - "6969:6969"
     restart: unless-stopped

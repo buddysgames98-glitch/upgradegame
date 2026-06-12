@@ -1,5 +1,5 @@
 /**
- * game.js — Ascension Upgrade Tree Game
+ * game.js — Upgrade Tree Maker
  *
  * Handles:
  *  - Idle resource accumulation with real-time display
@@ -63,6 +63,7 @@ const Game = (() => {
     await loadSave();
 
     setLoadMsg('Rendering…', 90);
+    recomputeRate();
     initCanvases();
     setupEvents();
     startLoop();
@@ -82,10 +83,10 @@ const Game = (() => {
 
   // ── Session ───────────────────────────────────────────────────────────────
   function getOrCreateSession() {
-    let sid = localStorage.getItem('ascension_session');
+    let sid = localStorage.getItem('utm_session');
     if (!sid) {
       sid = 'sess_' + Math.random().toString(36).slice(2) + Date.now().toString(36);
-      localStorage.setItem('ascension_session', sid);
+      localStorage.setItem('utm_session', sid);
     }
     return sid;
   }
@@ -112,7 +113,7 @@ const Game = (() => {
       }
     } catch(e) {}
     // localStorage fallback
-    const lsSave = localStorage.getItem('ascension_save');
+    const lsSave = localStorage.getItem('utm_save');
     if (lsSave) { try { applySave(JSON.parse(lsSave)); } catch(e) {} }
   }
 
@@ -142,7 +143,7 @@ const Game = (() => {
       run_start:         S.runStart,
     };
     // Always localStorage for reliability
-    localStorage.setItem('ascension_save', JSON.stringify(saveData));
+    localStorage.setItem('utm_save', JSON.stringify(saveData));
     // Server save (best-effort)
     try { await fetch('/api/save', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(saveData) }); } catch(e) {}
   }
@@ -251,7 +252,7 @@ const Game = (() => {
     const pr = S.treeDef.prestige_resource || {};
     document.getElementById('prestige-icon').textContent  = pr.icon   || '✨';
     document.getElementById('prestige-label').textContent = pr.name   || 'Essence';
-    document.title = `${S.treeDef.name || 'Ascension'} — Upgrade Tree`;
+    document.title = `${S.treeDef.name || 'Upgrade Tree Maker'}`;
   }
 
   // ── Canvas Setup ──────────────────────────────────────────────────────────
@@ -777,7 +778,7 @@ const Game = (() => {
       run_start:         S.runStart,
       exported_at:       Date.now(),
     };
-    downloadBlob(new Blob([JSON.stringify(save,null,2)],{type:'application/json'}), 'ascension_save.json');
+    downloadBlob(new Blob([JSON.stringify(save,null,2)],{type:'application/json'}), 'utm_save.json');
     toast('Save exported!');
   }
 
@@ -802,7 +803,7 @@ const Game = (() => {
 
   function hardReset() {
     if (!confirm('DELETE ALL DATA? This cannot be undone.')) return;
-    localStorage.removeItem('ascension_save');
+    localStorage.removeItem('utm_save');
     S.resources=0; S.totalEarned=0; S.unlocked=new Set();
     S.inProgress={}; S.prestigeCount=0; S.prestigePoints=0;
     S.prestigeUnlocked=new Set(); S.runStart=Date.now();
@@ -859,7 +860,7 @@ window.addEventListener('DOMContentLoaded', () => Game.init());
 window.addEventListener('beforeunload', () => {
   // Sync save on unload
   const save = {
-    session_id: localStorage.getItem('ascension_session'),
+    session_id: localStorage.getItem('utm_session'),
   };
   // localStorage save already kept live; just ensure it's written
 });
